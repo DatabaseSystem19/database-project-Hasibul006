@@ -114,3 +114,43 @@ END;
 /
 
 
+--Trigger1
+
+set serveroutput on
+create or replace trigger insertion
+after insert on book 
+REFERENCING OLD AS o NEW AS n
+for each row 
+begin
+INSERT INTO borrowings VALUES(1000013,10001,:n.book_id,100,TO_DATE('2023-05-10','YYYY-MM-DD'),TO_DATE('2023-05-24','YYYY-MM-DD'));
+end;
+/
+
+
+--Trigger2
+
+set serveroutput on
+create or replace trigger deletion
+after delete on borrowings 
+referencing old as o new as n
+for each row 
+begin
+delete from fine where borrowing_id = :o.borrowing_id;
+end;
+/
+
+
+--Trigger3
+
+set serveroutput on
+create or replace trigger updating
+after update on borrowings
+referencing old as o new as n
+for each row     
+begin
+delete from fine where borrowing_id = :o.borrowing_id;
+end
+/
+
+
+
